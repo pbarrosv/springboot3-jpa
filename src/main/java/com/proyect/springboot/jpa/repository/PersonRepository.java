@@ -10,6 +10,10 @@ import com.proyect.springboot.jpa.entity.Person;
 
 public interface PersonRepository extends CrudRepository<Person, Long> {
 
+	/**JPQL instanciación dinámica de clase entity personalizada**/
+	@Query("select new Person(p.name, p.lastname) from Person p")
+	List<Person> findAllObjectPersonPersonalized();
+	
 	/******JPQL campos personalizados***********/
 	@Query("select p.name from Person p where p.id=?1")
 	String getNameById(Long id);
@@ -41,5 +45,14 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 	@Query("select p.name, p.programingLanguage from Person p")
 	List<Object[]> obtenerPersonData();
 	
+	@Query("select p.id, p.name, p.lastname, p.programingLanguage from Person p")
+	List<Object[]> obtenerPersonDataList(); 
 	
+	/*No Optional de Object[]*/
+	@Query("select p.id, p.name, p.lastname, p.programingLanguage from Person p where p.id=?1")
+	Optional<Object> obtenerPersonDataById(Long id);
+	
+	/**/
+	@Query("select p.programingLanguage, p from Person p")
+	List<Object[]> findAllMixPerson();
 }
