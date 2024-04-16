@@ -1,10 +1,14 @@
 package com.proyect.springboot.jpa.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,8 +26,18 @@ public class Person {
 	@Column(name="programing_language")
 	private String programingLanguage;
 	
+	@Column(name = "create_at")
+	private LocalDateTime creaAt;
+	
+	@Column(name = "update_at")
+	private LocalDateTime updateAt;
+	
 	public Person() {
-		super();
+	}
+
+	public Person(String name, String lastname) {
+		this.name = name;
+		this.lastname = lastname;
 	}
 
 	public Person(Long id, String name, String lastname, String programingLanguage) {
@@ -34,6 +48,18 @@ public class Person {
 		this.programingLanguage = programingLanguage;
 	}
 
+	@PrePersist
+	public void prePersist() {
+		System.out.println("Evento del ciclo de vida del entity pre-persist");
+		this.creaAt = LocalDateTime.now();
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		System.out.println("Evento del ciclo de vida del entity pre-update");
+		this.updateAt = LocalDateTime.now();
+	}
+	
 	public Long getId() {
 		return id;
 	}
